@@ -8,7 +8,7 @@
 notebook_mode = True 
 viz_mode = True
 ```
-## 解決旅行推銷員問題（TSP）
+## 常見的數據處理、機器學習和深度學習所需的庫和模組。用於構建和訓練機器學習模型，特別是在處理圖形結構數據。
 ```
 import os #用於與操作系統互動，如文件和目錄的管理
 import json #用於解析和生成 JSON（JavaScript Object Notation）格式的數據，為常用的數據交換格式
@@ -30,7 +30,8 @@ from sklearn.utils.class_weight import compute_class_weight #用於計算類別�
 
 from tensorboardX import SummaryWriter #用於將 PyTorch 訓練過程中的數據（如損失、準確率）記錄到 TensorBoard 以便可視化
 from fastprogress import master_bar, progress_bar #用於快速和簡便地顯示進度條的庫，通常在長時間運行的過程中使用
-
+```
+```
 # Remove warning
 import warnings #用於控制警告訊息的顯示，這裡用來忽略某些類型的警告
 warnings.filterwarnings("ignore", category=UserWarning)
