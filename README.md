@@ -1,15 +1,15 @@
 # agn5
 ## 用來開啟或關閉某些功能，以便於用戶根據需要進行操作
-1. 'notebook_mode'：
+1. `notebook_mode`：
    當設定為 `True` 時，表示希望在 Jupyter Notebook環境中運行代碼。這種模式通常會啟用一些特定的功能，如更好的輸出顯示、互動式控制。
-2. 'viz_mode'：
+2. `viz_mode`：
 當設定為 'True' 時，表示啟用視覺化模式。這涉及生成圖表、圖形或其他視覺化表示，以幫助分析數據或呈現結果。在許多數據科學庫中（如 Matplotlib、Seaborn、Plotly 等），視覺化是分析和解釋數據的重要部分。
 ```
 notebook_mode = True 
 viz_mode = True
 ```
 ## 解決旅行推銷員問題（TSP）
-'''
+```
 import os #用於與操作系統互動，如文件和目錄的管理
 import json #用於解析和生成 JSON（JavaScript Object Notation）格式的數據，為常用的數據交換格式
 import argparse #用於解析命令行參數，便於在運行程式時傳入不同的參數設置
@@ -44,4 +44,4 @@ from utils.google_tsp_reader import GoogleTSPReader
 from utils.plot_utils import *
 from models.gcn_model import ResidualGatedGCNModel
 from utils.model_utils import *
-'''
+```
