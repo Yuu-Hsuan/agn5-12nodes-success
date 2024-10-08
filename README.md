@@ -47,8 +47,8 @@ from models.gcn_model import ResidualGatedGCNModel #導入自定義的 GCN（圖
 from utils.model_utils import *從`utils.model_utils`導入模型相關的工具和函數
 ```
 ## 設定Jupyter Notebook環境中的特定行為，用於開發和測試數據科學或機器學習程式碼
-*`%load_ext autoreload`:Jupyter Notebook 的magic command，用於加載 autoreload 擴展。這個擴展允許自動重新加載模組，使 Notebook 可以在編輯外部 Python 檔案後立即加載變更，而不需重新啟動內核
-*`%autoreload 2`:指示 Notebook 自動重新加載所有導入的模組。這樣在更新模組後，就不必每次手動重新導入或重啟 Notebook
+ `%load_ext autoreload`:Jupyter Notebook 的magic command，用於加載 autoreload 擴展。這個擴展允許自動重新加載模組，使 Notebook 可以在編輯外部 Python 檔案後立即加載變更，而不需重新啟動內核
+* `%autoreload 2`:指示 Notebook 自動重新加載所有導入的模組。這樣在更新模組後，就不必每次手動重新導入或重啟 Notebook
 ```
 if notebook_mode == True:
     %load_ext autoreload 
@@ -60,8 +60,8 @@ if notebook_mode == True:
 ```
 # Load configurations (讀取超參數設定)
 ## 根據運行環境設定不同的配置檔案路徑，並加載相應的配置
-*根據不同模式（`notebook_mode` 和 `viz_mode` 的值）來設置配置文件路徑並加載配置內容，這樣可以適應 Notebook 和命令行環境的需求
-*目的:靈活地根據運行環境來自動選擇適當的配置文件
+* 根據不同模式（`notebook_mode` 和 `viz_mode` 的值）來設置配置文件路徑並加載配置內容，這樣可以適應 Notebook 和命令行環境的需求
+* 目的:靈活地根據運行環境來自動選擇適當的配置文件
 ```
 if notebook_mode==False: #代表不是在 Jupyter Notebook 環境下運行
     parser = argparse.ArgumentParser(description='gcn_tsp_parser') #用 argparse 來從命令行接收參數
@@ -76,8 +76,8 @@ config = get_config(config_path) #加載指定路徑的配置文件，從 JSON �
 print("Loaded {}:\n{}".format(config_path, config)) #打印出所加載的配置文件路徑及其內容，方便確認所加載的設置是否符合預期
 ```
 ## 針對視覺化模式 (viz_mode == True) 的特定配置
-*設定了一些 GPU 和模型運行的參數，以便在可視化時更便於檢查和調整
-*提供了一些可以開啟的選項來測試不同規模的 TSP 問題，適合在進行可視化或模型驗證時使用
+* 設定了一些 GPU 和模型運行的參數，以便在可視化時更便於檢查和調整
+* 提供了一些可以開啟的選項來測試不同規模的 TSP 問題，適合在進行可視化或模型驗證時使用
 ```
 if viz_mode==True:
     config.gpu_id = "0" #指定使用 GPU 編號為 0 的設備，指在有多個 GPU 的情況下，系統將在第 0 個 GPU 上運行模型
