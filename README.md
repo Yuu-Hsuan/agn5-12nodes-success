@@ -47,7 +47,7 @@ from models.gcn_model import ResidualGatedGCNModel #導入自定義的 GCN（圖
 from utils.model_utils import *從`utils.model_utils`導入模型相關的工具和函數
 ```
 ## 設定Jupyter Notebook環境中的特定行為，用於開發和測試數據科學或機器學習程式碼
- `%load_ext autoreload`:Jupyter Notebook 的magic command，用於加載 autoreload 擴展。這個擴展允許自動重新加載模組，使 Notebook 可以在編輯外部 Python 檔案後立即加載變更，而不需重新啟動內核
+* `%load_ext autoreload`:Jupyter Notebook 的magic command，用於加載 autoreload 擴展。這個擴展允許自動重新加載模組，使 Notebook 可以在編輯外部 Python 檔案後立即加載變更，而不需重新啟動內核
 * `%autoreload 2`:指示 Notebook 自動重新加載所有導入的模組。這樣在更新模組後，就不必每次手動重新導入或重啟 Notebook
 ```
 if notebook_mode == True:
