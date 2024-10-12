@@ -91,3 +91,15 @@ print(day_list)
 for i in range(len(day_list)-1):
     print(day_list[i+1]-day_list[i])
 ```
+# PLOT
+```
+#繪製損失隨著回合數變化的曲線，並將損失數據保存到文本文件，以便未來分析和比較: DQN 和 GCN
+plt.plot(np.array(Loss_plt), c='purple', label='Loss')
+plt.legend(loc='best')
+plt.ylabel('Loss')
+plt.xlabel('episodes')
+plt.axis([0, 70000, 0, 100])
+np.savetxt('Loss.txt',Loss_plt,fmt="%f" )
+plt.grid()
+plt.show()
+```
