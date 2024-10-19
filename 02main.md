@@ -229,4 +229,5 @@ plt.grid()
 plt.show() #使用plt.show()顯示損失值曲線圖
 ```
 結果:
+
 ![image](https://github.com/Yuu-Hsuan/agn5-12nodes-success/blob/main/img/3.png)
