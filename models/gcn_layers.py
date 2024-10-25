@@ -50,14 +50,6 @@ class BatchNormEdge(nn.Module):
 
 
 class NodeFeatures(nn.Module):
-    """Convnet features for nodes.
-    
-    Using `sum` aggregation:
-        x_i = U*x_i +  sum_j [ gate_ij * (V*x_j) ]
-    
-    Using `mean` aggregation:
-        x_i = U*x_i + ( sum_j [ gate_ij * (V*x_j) ] / sum_j [ gate_ij] )
-    """
     
     def __init__(self, hidden_dim, aggregation="mean"):
         super(NodeFeatures, self).__init__()
@@ -92,11 +84,7 @@ class NodeFeatures(nn.Module):
 
 
 class EdgeFeatures(nn.Module):
-    """Convnet features for edges.
-
-    e_ij = U*e_ij + V*(x_i + x_j)
-    """
-
+    
     def __init__(self, hidden_dim):
         super(EdgeFeatures, self).__init__()
         self.U = nn.Linear(hidden_dim, hidden_dim, True)
@@ -111,20 +99,17 @@ class EdgeFeatures(nn.Module):
         Returns:
             e_new: Convolved edge features (batch_size, num_nodes, num_nodes, hidden_dim)
         """
-        #print("x:",x.size())
-        #print("e:",e.size())
+      
         Ue = self.U(e)
         Vx = self.V(x)
         Wx = Vx.unsqueeze(1)  # extend Vx from "B x V x H" to "B x 1 x V x H"
         Vx = Vx.unsqueeze(2)  # Extend Vx from "B x V x H" to "B x V x 1 x H"  
         e_new = Ue * (Vx + Wx)
-        #print("e_new:",e_new.size())
+       
         return e_new
 
 
 class ResidualGatedGCNLayer(nn.Module):
-    """Convnet layer with gating and residual connection.
-    """
 
     def __init__(self, hidden_dim, aggregation="sum"):
         super(ResidualGatedGCNLayer, self).__init__()
@@ -152,34 +137,19 @@ class ResidualGatedGCNLayer(nn.Module):
         # Compute edge gates
         e_tmp = self.bn_edge(e_tmp)
         edge_gate = F.softmax(e_tmp,dim=2)
-        #edge_gate = F.sigmoid(e_tmp)
-        #print("E_gate",edge_gate)
-        #print("edge_gate",edge_gate.size())
-        # Node convolution
+       
         x_tmp = self.node_feat(x_in,edge_gate)
-        # Batch normalization
-
-        # Residual connection
-        ##x_new = x_in + x
-        
-        #print("X_TMP",x_tmp)
+     
         x_tmp = self.bn_node(x_tmp)
         x = F.relu(x_tmp)
         x_new = x_in + x
-#         Ux = self.U(x_in) 
-#         x_new = Ux + x
         e_new = edge_gate * e_in + e_in
-        #print("X!!!!",x_new)
-        #print("E!!!!",e_new)
-        #print("e_new!",e_new.size())
-        #print("x_new!",x_new.size())
+    
         return x_new, e_new
 
 
 class MLP(nn.Module):
-    """Multi-layer Perceptron for output prediction.
-    """
-
+    
     def __init__(self, hidden_dim, output_dim, L=2):
         super(MLP, self).__init__()
         self.L = L
@@ -190,13 +160,7 @@ class MLP(nn.Module):
         self.V = nn.Linear(hidden_dim, output_dim, True)
 
     def forward(self, x):
-        """
-        Args:
-            x: Input features (batch_size, hidden_dim)
-
-        Returns:
-            y: Output predictions (batch_size, output_dim)
-        """
+        
         Ux = x
         for U_i in self.U:
             Ux = U_i(Ux)  # B x H
@@ -205,32 +169,15 @@ class MLP(nn.Module):
         return y
 
 class MLP_Q(nn.Module):
-    """Multi-layer Perceptron for output prediction.
-    """
-
+    
     def __init__(self, hidden_dim, output_dim, L=2):
         super(MLP_Q, self).__init__()
         self.L = L
-#         U = []
-#         for layer in range(self.L - 1):
-#             U.append(nn.Linear(hidden_dim, hidden_dim, True))
-#         self.U = nn.ModuleList(U)
-#         self.V = nn.Linear(hidden_dim, output_dim, True)
-        self.V = nn.Conv2d(hidden_dim, output_dim, 1, 1, 0)
 
     def forward(self, x):
-        """
-        Args:
-            x: Input features (batch_size, hidden_dim)
-
-        Returns:
-            y: Output predictions (batch_size, output_dim)
-        """
+        
         Ux = x                #B x V x V x H
-        #print("UX",Ux)
-#         for U_i in self.U:
-#             Ux = U_i(Ux)  # B x H
-#             Ux = F.relu(Ux)  # B x H
+        
         Ux=Ux.permute(0,3,1,2) #B x H x V x V
         y = self.V(Ux)  # B x O
         #y = F.relu(y)
