@@ -21,7 +21,7 @@ class BatchNormNode(nn.Module):
         super(BatchNormNode, self).__init__()
         self.batch_norm = nn.BatchNorm1d(hidden_dim, track_running_stats=False)
 ```
-##forward 方法是前向傳播函數
+## forward 方法是前向傳播函數
 1.  `x_trans = x.transpose(1, 2).contiguous()`：
 
     將資料形狀從 (batch_size, num_nodes, hidden_dim) 轉換為 (batch_size, hidden_dim, num_nodes)，以便於進行 BatchNorm1d。
