@@ -6,21 +6,13 @@ import numpy as np
 
 
 class BatchNormNode(nn.Module):
-    """Batch normalization for node features.
-    """
 
     def __init__(self, hidden_dim):
         super(BatchNormNode, self).__init__()
         self.batch_norm = nn.BatchNorm1d(hidden_dim, track_running_stats=False)
 
     def forward(self, x):
-        """
-        Args:
-            x: Node features (batch_size, num_nodes, hidden_dim)
-
-        Returns:
-            x_bn: Node features after batch normalization (batch_size, num_nodes, hidden_dim)
-        """
+        
         x_trans = x.transpose(1, 2).contiguous()  # Reshape input: (batch_size, hidden_dim, num_nodes)
         x_trans_bn = self.batch_norm(x_trans)
         x_bn = x_trans_bn.transpose(1, 2).contiguous()  # Reshape to original shape
@@ -28,21 +20,13 @@ class BatchNormNode(nn.Module):
 
 
 class BatchNormEdge(nn.Module):
-    """Batch normalization for edge features.
-    """
-
+   
     def __init__(self, hidden_dim):
         super(BatchNormEdge, self).__init__()
         self.batch_norm = nn.BatchNorm2d(hidden_dim, track_running_stats=False)
 
     def forward(self, e):
-        """
-        Args:
-            e: Edge features (batch_size, num_nodes, num_nodes, hidden_dim)
-
-        Returns:
-            e_bn: Edge features after batch normalization (batch_size, num_nodes, num_nodes, hidden_dim)
-        """
+       
         e_trans = e.transpose(1, 3).contiguous()  # Reshape input: (batch_size, num_nodes, num_nodes, hidden_dim)
         e_trans_bn = self.batch_norm(e_trans)
         e_bn = e_trans_bn.transpose(1, 3).contiguous()  # Reshape to original
@@ -58,22 +42,14 @@ class NodeFeatures(nn.Module):
         self.V = nn.Linear(hidden_dim, hidden_dim, True)
 
     def forward(self, x, edge_gate):
-        """
-        Args:
-            x: Node features (batch_size, num_nodes, hidden_dim)
-            edge_gate: Edge gate values (batch_size, num_nodes, num_nodes, hidden_dim)
-
-        Returns:
-            x_new: Convolved node features (batch_size, num_nodes, hidden_dim)
-        """
+        
         Ux = self.U(x)  # B x V x H
         Vx = self.V(x)  # B x V x H
         Vx = Vx.unsqueeze(1)  # extend Vx from "B x V x H" to "B x 1 x V x H"
         
         #print("W1",W1.size())
         gateVx = edge_gate * Vx # B x V x V x H
-        #print("gateVx",gateVx.size())
-        #print(gateVx) 
+        
         if self.aggregation=="mean":
             x_new = Ux + (torch.sum(gateVx, dim=2)) / (1e-20 + torch.sum(edge_gate, dim=2))  # B x V x H
             #x_new = (torch.sum(gateVx, dim=2)) / (1e-20 + torch.sum(edge_gate, dim=2))  # B x V x H
@@ -91,14 +67,6 @@ class EdgeFeatures(nn.Module):
         self.V = nn.Linear(hidden_dim, hidden_dim, True)
         
     def forward(self, x, e):
-        """
-        Args:
-            x: Node features (batch_size, num_nodes, hidden_dim)
-            e: Edge features (batch_size, num_nodes, num_nodes, hidden_dim)
-
-        Returns:
-            e_new: Convolved edge features (batch_size, num_nodes, num_nodes, hidden_dim)
-        """
       
         Ue = self.U(e)
         Vx = self.V(x)
@@ -120,15 +88,7 @@ class ResidualGatedGCNLayer(nn.Module):
         #改
         #self.U = nn.Linear(hidden_dim, hidden_dim, True)
     def forward(self, x, e):
-        """
-        Args:
-            x: Node features (batch_size, num_nodes, hidden_dim)
-            e: Edge features (batch_size, num_nodes, num_nodes, hidden_dim)
-
-        Returns:
-            x_new: Convolved node features (batch_size, num_nodes, hidden_dim)
-            e_new: Convolved edge features (batch_size, num_nodes, num_nodes, hidden_dim)
-        """
+        
         e_in = e
         x_in = x
         # Edge convolution
